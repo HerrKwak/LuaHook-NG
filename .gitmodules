@@ -4,3 +4,6 @@
 [submodule "Lua5.1"]
 	path = Lua5.1
 	url = https://github.com/LuaHookNG-SubModules/Lua5.1.git
+[submodule "Detours"]
+	path = Detours
+	url = https://github.com/Microsoft/Detours.git
