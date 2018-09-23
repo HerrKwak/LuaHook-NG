@@ -12,7 +12,7 @@ namespace Olipro {
 	using disable_if_void = std::enable_if_t<!std::is_void<T>::value, T>;
 
 	template <typename T, typename ...Args,
-		typename R = disable_if_void<std::result_of<T(Args...)>::type>>
+		typename R = disable_if_void<typename std::result_of<T(Args...)>::type>>
 	R SafeCall(T func, Args... args)
 	{
 		size_t savedEsp;
@@ -23,7 +23,7 @@ namespace Olipro {
 	}
 
 	template <typename T, typename ...Args,
-		typename = enable_if_void<std::result_of_t<T(Args...)>>>
+		typename = enable_if_void<typename std::result_of_t<T(Args...)>>>
 	void SafeCall(T func, Args... args)
 	{
 		size_t savedEsp;

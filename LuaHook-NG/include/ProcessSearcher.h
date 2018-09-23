@@ -74,5 +74,44 @@ namespace Olipro
 			}
 			return *reinterpret_cast<std::add_pointer_t<T>>(ret);
 		}
+
+
+		uint32_t findPattern(const std::string& pattern, const char pred, DWORD offset)
+		{
+			bool found = false;
+
+			for (auto i = moduleBase; i < moduleBase + moduleSize - pattern.length(); i++)
+			{
+				found = true;
+
+				for (unsigned int idx = 0; idx < pattern.length(); idx++)
+				{
+					if (pattern[idx] != pred && pattern[idx] != *(char*)(i + idx))
+					{
+						found = false;
+						break;
+					}
+				}
+
+				if (found)
+					return reinterpret_cast<uint32_t>(i + offset);
+			}
+			return 0;
+		}
+
+		template <typename T>
+		T& CalcFunction(const std::string& signature,
+			const char predicate,
+			const uint32_t offset = 0)
+		{
+			auto sigFind = findPattern(signature, predicate, offset);
+			uint32_t foundFunc = 0;
+			if (sigFind != 0)
+			{
+				foundFunc = sigFind + *reinterpret_cast<int32_t*>(sigFind) + 4;
+			}
+
+			return *reinterpret_cast<std::add_pointer_t<T>>(foundFunc);
+		}
 	};
 }
